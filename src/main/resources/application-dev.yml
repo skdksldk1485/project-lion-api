@@ -1,0 +1,7 @@
+spring:
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    password: 9441
+    url: jdbc:mariadb://localhost:3306/shop
