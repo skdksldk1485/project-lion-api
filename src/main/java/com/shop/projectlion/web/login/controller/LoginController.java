@@ -1,34 +1,32 @@
 package com.shop.projectlion.web.login.controller;
 
-import com.shop.projectlion.domain.member.entity.Member;
-import com.shop.projectlion.domain.member.service.MemberService;
+import com.shop.projectlion.global.error.exception.BusinessException;
+import com.shop.projectlion.global.error.exception.ErrorCode;
 import com.shop.projectlion.web.login.dto.MemberRegisterDto;
+import com.shop.projectlion.web.login.service.LoginService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.thymeleaf.util.StringUtils;
 
-import javax.validation.Valid;
 
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final MemberService memberService;
-    private final PasswordEncoder passwordEncoder;
+    private final LoginService loginService;
 
     @GetMapping("/login")
-    public String login() {
-        return "login/loginform";
-    }
-
-    @GetMapping("/login/error")
-    public String loginError(Model model){
-        model.addAttribute("loginErrorMsg","아이디 또는 비밀번호를 확인해주세요");
+    public String login(@RequestParam(required = false) String isError, Model model) {
+        if(Boolean.valueOf(isError)) {
+            model.addAttribute("loginError", ErrorCode.LOGIN_ERROR.getMessage());
+        }
         return "login/loginform";
     }
 
@@ -39,29 +37,23 @@ public class LoginController {
     }
 
     @PostMapping("/register")
-    public String newMember(@Valid MemberRegisterDto memberRegisterDto, BindingResult bindingResult, Model model){
-        if(bindingResult.hasErrors()){
+    public String register(@Validated @ModelAttribute("memberRegisterDto") MemberRegisterDto memberRegisterDto, BindingResult bindingResult) {
+
+        if(bindingResult.hasErrors()) {
+            return "/login/registerform";
+        } else if(!StringUtils.equals(memberRegisterDto.getPassword(), memberRegisterDto.getPassword2())) {
+            bindingResult.reject("mismatchedPassword", ErrorCode.MISMATCHED_PASSWORD.getMessage());
             return "login/registerform";
         }
 
-        try{
-            Member member = Member.createMember(memberRegisterDto, passwordEncoder);
-            memberService.saveMember(member);
-        } catch (IllegalStateException e){
-            model.addAttribute("errorMessage",e.getMessage());
+        try {
+            loginService.registerMember(memberRegisterDto);
+        } catch (BusinessException e) {
+            e.printStackTrace();
+            bindingResult.reject("alreadyMember", e.getMessage());
             return "login/registerform";
         }
 
         return "redirect:/login";
     }
-
-//    public void validateSamePassword(MemberRegisterDto memberRegisterDto){
-//        String password = memberRegisterDto.getPassword();
-//        String password2 = memberRegisterDto.getPassword2();
-//
-//        if(!password.equals(password2)){
-//            throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
-//        }
-//    }
-
 }

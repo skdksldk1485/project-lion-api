@@ -11,8 +11,6 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "member")
@@ -45,16 +43,22 @@ public class Member extends BaseEntity {
 
     private LocalDateTime tokenExpirationTime;
 
-    public static Member createMember(MemberRegisterDto memberRegisterDto, PasswordEncoder passwordEncoder){
-        Member member = Member.builder()
-                .email(memberRegisterDto.getEmail())
-                .memberName(memberRegisterDto.getName())
-                .memberType(MemberType.GENERAL)
-                .password(passwordEncoder.encode(memberRegisterDto.getPassword()))
-                .refreshToken(null)
-                .role(Role.ADMIN)
-                .tokenExpirationTime(null)
+    @Builder
+    public Member(MemberType memberType, String email, String password, String memberName, Role role) {
+        this.memberType = memberType;
+        this.email = email;
+        this.password = password;
+        this.memberName = memberName;
+        this.role = role;
+    }
+
+    public static Member createMember(Member member) {
+        return Member.builder()
+                .memberType(member.getMemberType())
+                .email(member.getEmail())
+                .password(member.getPassword())
+                .memberName(member.getMemberName())
+                .role(member.getRole())
                 .build();
-        return member;
     }
 }
