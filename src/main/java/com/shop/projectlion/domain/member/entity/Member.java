@@ -1,11 +1,12 @@
 package com.shop.projectlion.domain.member.entity;
 
+import com.shop.projectlion.domain.base.BaseEntity;
 import com.shop.projectlion.domain.member.constant.MemberType;
 import com.shop.projectlion.domain.member.constant.Role;
-import com.shop.projectlion.domain.base.BaseEntity;
-import com.shop.projectlion.web.login.dto.MemberRegisterDto;
-import lombok.*;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 @Getter @Setter
 public class MemberRegisterDto {
@@ -23,7 +24,7 @@ public class MemberRegisterDto {
     private String email;
 
     @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
-    @Length(min=8, max=16, message = "비밀번호는 8자이상, 16자 이하로 입력해주세요.")
+    @Size(min=8, max=16, message = "비밀번호는 8자이상, 16자 이하로 입력해주세요.")
     private String password;
 
     private String password2;
