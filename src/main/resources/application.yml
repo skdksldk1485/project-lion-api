@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+spring:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    properties:
+      hibernate:
+        format_sql : true # sql 예쁘게 출력
+        default_batch_fetch_size: 1000
+
+    show-sql: true  # sql 출력
+
+  servlet:
+    multipart:
+      max-file-size: 10MB # 파일 업로드 요청 시 하나의 파일 크기 10MB로 제한
+      max-request-size: 100MB # 파일 업로드 요청 시 모든 파일의 크기의합 100MB로 제한
+
+logging:
+  level:
+    org.hibernate.type: trace # sql binding 값 출력
