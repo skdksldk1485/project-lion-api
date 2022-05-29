@@ -10,3 +10,6 @@ spring:
     username: sa
     password:
     url: jdbc:h2:~/test3
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
