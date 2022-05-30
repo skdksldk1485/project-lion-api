@@ -30,3 +30,7 @@ spring:
 logging:
   level:
     org.hibernate.type: trace # sql binding 값 출력
+
+file:
+  upload:
+    path: C:\Users\JK\Documents\shop  # 윈도우파일 경로 예시 : C:/shop/
