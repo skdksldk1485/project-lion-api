@@ -1,40 +1,74 @@
 package com.shop.projectlion.web.adminitem.controller;
 
+import com.shop.projectlion.domain.delivery.entity.Delivery;
+import com.shop.projectlion.domain.delivery.repository.DeliveryRepository;
 import com.shop.projectlion.domain.item.constant.ItemSellStatus;
+import com.shop.projectlion.domain.member.entity.Member;
+import com.shop.projectlion.domain.member.repository.MemberRepository;
+import com.shop.projectlion.global.error.exception.ErrorCode;
 import com.shop.projectlion.web.adminitem.dto.DeliveryDto;
 import com.shop.projectlion.web.adminitem.dto.InsertItemDto;
 import com.shop.projectlion.web.adminitem.dto.UpdateItemDto;
+import com.shop.projectlion.web.adminitem.service.AdminItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/items")
 public class AdminItemController {
 
+    private final DeliveryRepository deliveryrepository;
+    private final MemberRepository memberRepository;
+    private final AdminItemService adminItemService;
+
     @GetMapping("/new")
     public String itemForm(Model model, Principal principal) {
-
+        String email = principal.getName();
+        Optional<Member> member = memberRepository.findByEmail(email);
+        List<Delivery> deliveries = deliveryrepository.findByMember(member);
         List<DeliveryDto> deliveryDtos = new ArrayList<>();
-        DeliveryDto deliveryDto = DeliveryDto.builder()
-                .deliveryId(1L)
-                .deliveryName("마포구 물류센터")
-                .deliveryFee(3000)
-                .build();
-        deliveryDtos.add(deliveryDto);
-
+        for (int i = 0; i < deliveries.size(); i++) {
+            Delivery eachDelivery = deliveries.get(i);
+            DeliveryDto deliveryDto = DeliveryDto.toDto(eachDelivery);
+            deliveryDtos.add(deliveryDto);
+        }
         model.addAttribute("deliveryDtos", deliveryDtos);
         model.addAttribute("insertItemDto", new InsertItemDto());
 
         return "adminitem/registeritemform";
+    }
+
+
+    @PostMapping("/new")
+    public String createItem(Principal principal, @ModelAttribute("insertItemDto") @Validated InsertItemDto insertItemDto,
+                             BindingResult bindingResult, RedirectAttributes redirectAttributes){
+        if(bindingResult.hasErrors()) {
+            return "adminitem/registeritemform";
+        } else if (insertItemDto.getItemImageFiles().get(0).isEmpty()) {
+            bindingResult.reject("notfoundimage", ErrorCode.NOT_FOUND_IMAGE.getMessage());
+            return "adminitem/registeritemform";
+        }
+        try {
+            Long itemId = adminItemService.createItem(insertItemDto, principal.getName());
+            redirectAttributes.addAttribute("itemId", itemId);
+        } catch (Exception e) {
+            e.printStackTrace();
+            bindingResult.reject("error", "상품등록중 에러가 발생했습니다.");
+            return "adminitem/registeritemform";
+        }
+
+        return "redirect:/admin/items/{itemId}";
     }
 
     @GetMapping("/{itemId}")

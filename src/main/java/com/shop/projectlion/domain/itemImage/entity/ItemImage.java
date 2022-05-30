@@ -3,6 +3,7 @@ package com.shop.projectlion.domain.itemImage.entity;
 import com.shop.projectlion.domain.base.BaseEntity;
 import com.shop.projectlion.domain.item.entity.Item;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -19,22 +20,38 @@ public class ItemImage extends BaseEntity {
     @Column(name = "item_image_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(unique = true)
     private String imageName;
 
-    @Column(nullable = false)
+    @Column
     private String imageUrl;
 
     @Column(nullable = false)
-    private String isRepImage;
+    private Boolean isRepImage;
 
-    @Column(nullable = false)
+    @Column
     private String originalImageName;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
+    @Builder
+    public ItemImage(String imageName, String imageUrl, String originalImageName, Boolean isRepImage, Item item) {
+        this.imageName = imageName;
+        this.imageUrl = imageUrl;
+        this.isRepImage = isRepImage;
+        this.originalImageName = originalImageName;
+        this.item = item;
+    }
+
+    public static ItemImage updateItemImage(ItemImage itemImage) {
+        return ItemImage.builder()
+                .imageName(itemImage.getImageName())
+                .imageUrl(itemImage.getImageUrl())
+                .originalImageName(itemImage.getOriginalImageName())
+                .build();
+    }
 
 
 }

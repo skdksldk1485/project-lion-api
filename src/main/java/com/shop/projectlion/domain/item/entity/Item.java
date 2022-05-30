@@ -5,6 +5,7 @@ import com.shop.projectlion.domain.delivery.entity.Delivery;
 import com.shop.projectlion.domain.item.constant.ItemSellStatus;
 import com.shop.projectlion.domain.member.entity.Member;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -44,4 +45,34 @@ public class Item extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @Builder
+    public Item(String itemDetail,
+                String itemName,
+                ItemSellStatus itemSellStatus,
+                Integer price,
+                Integer stockNumber,
+                Delivery delivery,
+                Member member){
+        this.itemDetail = itemDetail;
+        this.itemName = itemName;
+        this.itemSellStatus = itemSellStatus;
+        this.price = price;
+        this.stockNumber = stockNumber;
+        this.delivery = delivery;
+        this.member = member;
+    }
+
+    public static Item createItem(Item item, Member member, Delivery delivery){
+        return Item.builder()
+                .itemDetail(item.getItemDetail())
+                .itemName(item.getItemName())
+                .itemSellStatus(item.getItemSellStatus())
+                .price(item.getPrice())
+                .stockNumber(item.getStockNumber())
+                .delivery(delivery)
+                .member(member)
+                .build();
+    }
+
 }

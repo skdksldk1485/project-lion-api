@@ -34,7 +34,7 @@
                         th:text="|${delivery.deliveryName} (${delivery.deliveryFee}원)|"></option>
             </select>
         </div>
-        <p th:errors="*{deliveryId}" class="field-error">Incorrect data</p>
+        <p th:if="${#fields.hasErrors('deliveryId')}" th:errors="*{deliveryId}" class="field-error">Incorrect data</p>
 
         <div class="input-group">
             <div class="input-group-prepend">
@@ -42,7 +42,7 @@
             </div>
             <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력해주세요">
         </div>
-        <p th:errors="*{itemName}" class="field-error">Incorrect data</p>
+        <p th:if="${#fields.hasErrors('itemName')}" th:errors="*{itemName}" class="field-error">Incorrect data</p>
 
         <div class="input-group">
             <div class="input-group-prepend">
@@ -58,13 +58,13 @@
             </div>
             <input type="number" th:field="*{stockNumber}" class="form-control" th:errorclass="field-error" placeholder="상품의 재고를 입력해주세요">
         </div>
-        <p th:errors="*{stockNumber}" class="field-error">Incorrect data</p>
+        <p th:if="${#fields.hasErrors('stockNumber')}" th:errors="*{stockNumber}" class="field-error">Incorrect data</p>
 
         <div class="input-group">
             <span class="input-group-text">상품 상세 내용</span>
             <textarea class="form-control" aria-label="With textarea" th:field="*{itemDetail}"></textarea>
         </div>
-        <p th:errors="*{itemDetail}" class="field-error">Incorrect data</p>
+        <p th:if="${#fields.hasErrors('itemDetail')}" th:errors="*{itemDetail}" class="field-error">Incorrect data</p>
 
 
         <th:block th:each="num: ${#numbers.sequence(1,5)}">
