@@ -2,41 +2,33 @@ package com.shop.projectlion.domain.member.service;
 
 import com.shop.projectlion.domain.member.entity.Member;
 import com.shop.projectlion.domain.member.repository.MemberRepository;
-import com.shop.projectlion.domain.member.validation.MemberValidation;
+import com.shop.projectlion.domain.member.validation.MemberValidator;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class MemberService implements UserDetailsService {
+public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final MemberValidation memberValidation;
+    private final MemberValidator memberValidator;
 
-    public Member saveMember(Member member){
-        memberValidation.validateDuplicateMember(member);
-        return memberRepository.save(member);
+    @Transactional
+    public void registerMember(Member member) {
+        validateRegisterMember(member);
+        memberRepository.save(member);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
-        Member member = memberRepository.findByEmail(email);
+    public void validateRegisterMember(Member member) {
+        memberValidator.validateDuplicateMember(member.getEmail());
+    }
 
-        if(member == null){
-            throw new UsernameNotFoundException(email);
-        }
-
-        return User.builder()
-                .username(member.getEmail())
-                .password(member.getPassword())
-                .roles(member.getRole().toString())
-                .build();
+    public Optional<Member> findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email);
     }
 
 }

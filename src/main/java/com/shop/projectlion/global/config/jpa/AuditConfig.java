@@ -1,4 +1,4 @@
-package com.shop.projectlion.global.config;
+package com.shop.projectlion.global.config.jpa;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 public class AuditConfig {
 
     @Bean
-    public AuditorAware<String> auditorProvider(){
+    public AuditorAware<String> auditorAware() {
         return new AuditorAwareImpl();
     }
+
 }
