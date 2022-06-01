@@ -22,6 +22,7 @@ public class Item extends BaseEntity {
     @Column(name = "item_id")
     private Long id;
 
+    @Lob
     @Column(nullable = false)
     private String itemDetail;
 
