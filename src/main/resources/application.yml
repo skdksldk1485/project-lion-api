@@ -33,4 +33,4 @@ logging:
 
 file:
   upload:
-    path: C:\Users\JK\Documents\shop  # 윈도우파일 경로 예시 : C:/shop/
+    path: C:/Users/JK/Documents/shop/  # 윈도우파일 경로 예시 : C:/shop/

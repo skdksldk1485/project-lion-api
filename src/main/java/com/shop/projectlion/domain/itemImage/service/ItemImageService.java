@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -19,28 +20,33 @@ public class ItemImageService {
 
     private final ItemImageRepository itemImageRepository;
     private final FileService fileService;
+    private final String IMAGE_URL_PREFIX = "/images/";
 
     @Transactional
-    public void saveItemImage(List<MultipartFile> multipartFiles, Item savedItem) throws Exception{
-        List<UploadFile> uploadFiles = fileService.storeFiles(multipartFiles);
-        for(int i = 0; i<uploadFiles.size(); i++){
-            String imageName = uploadFiles.get(i).getStoreFileName();
-            String imageUrl = uploadFiles.get(i).getFileUploadUrl();
-            String oriImageName = uploadFiles.get(i).getOriginalFileName();
-
+    public void saveItemImages(Item item, List<MultipartFile> itemImageFiles) throws Exception{
+        for(int i = 0; i<itemImageFiles.size(); i++){
             Boolean isRepImage = i == 0;
-
-            ItemImage itemImage = ItemImage.builder()
-                            .imageName(imageName)
-                            .imageUrl(imageUrl)
-                            .originalImageName(oriImageName)
-                            .isRepImage(isRepImage)
-                            .item(savedItem)
-                            .build();
-            itemImageRepository.save(itemImage);
+            saveItemImage(item, itemImageFiles.get(i), isRepImage);
         }
+    }
 
+    @Transactional
+    public void saveItemImage(Item item, MultipartFile itemImageFile, Boolean isRepImage) throws IOException {
 
+        UploadFile uploadFile = fileService.storeFile(itemImageFile);
+        String storeFileName = uploadFile != null ? uploadFile.getStoreFileName() : "";
+        String originalFilename = uploadFile != null ? uploadFile.getOriginalFileName() : "";
+        String imageUrl = uploadFile != null ? IMAGE_URL_PREFIX + storeFileName : "";
+
+        ItemImage itemImage = ItemImage.builder()
+                .imageName(storeFileName)
+                .imageUrl(imageUrl)
+                .originalImageName(originalFilename)
+                .isRepImage(isRepImage)
+                .build();
+
+        ItemImage saveItemImage = ItemImage.createItemImage(itemImage, item);
+        itemImageRepository.save(saveItemImage);
     }
 
 

@@ -10,4 +10,6 @@ public interface DeliveryRepository extends JpaRepository<Delivery, Long> {
 
     List<Delivery> findByMember(Member member);
 
+//    Optional<List<Delivery>> findByMember(Member member);
+
 }

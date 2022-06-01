@@ -1,18 +1,16 @@
 package com.shop.projectlion.web.adminitem.controller;
 
-import com.shop.projectlion.domain.delivery.entity.Delivery;
-import com.shop.projectlion.domain.delivery.repository.DeliveryRepository;
 import com.shop.projectlion.domain.item.constant.ItemSellStatus;
-import com.shop.projectlion.domain.member.entity.Member;
-import com.shop.projectlion.domain.member.repository.MemberRepository;
-import com.shop.projectlion.domain.member.service.MemberService;
-import com.shop.projectlion.global.error.exception.BusinessException;
+import com.shop.projectlion.domain.item.entity.Item;
+import com.shop.projectlion.global.config.security.UserDetailsImpl;
 import com.shop.projectlion.global.error.exception.ErrorCode;
 import com.shop.projectlion.web.adminitem.dto.DeliveryDto;
 import com.shop.projectlion.web.adminitem.dto.InsertItemDto;
 import com.shop.projectlion.web.adminitem.dto.UpdateItemDto;
 import com.shop.projectlion.web.adminitem.service.AdminItemService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,50 +22,43 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin/items")
 public class AdminItemController {
 
-    private final DeliveryRepository deliveryrepository;
-    private final MemberRepository memberRepository;
     private final AdminItemService adminItemService;
-    private final MemberService memberService;
+
+    @ModelAttribute("deliveryDtos")
+    public List<DeliveryDto> deliveryDtos(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String email = userDetails.getUsername();
+        List<DeliveryDto> deliveryDtos = adminItemService.getMemberDeliveryDtos(email);
+        return deliveryDtos;
+    }
 
     @GetMapping("/new")
-    public String itemForm(Model model, Principal principal) {
-        String email = principal.getName();
-        Member member = memberService.findMemberByEmail(email)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
-        List<Delivery> deliveries = deliveryrepository.findByMember(member);
-        List<DeliveryDto> deliveryDtos = new ArrayList<>();
-        for (int i = 0; i < deliveries.size(); i++) {
-            Delivery eachDelivery = deliveries.get(i);
-            DeliveryDto deliveryDto = DeliveryDto.toDto(eachDelivery);
-            deliveryDtos.add(deliveryDto);
-        }
-        model.addAttribute("deliveryDtos", deliveryDtos);
+    public String itemForm(Model model) {
         model.addAttribute("insertItemDto", new InsertItemDto());
-
         return "adminitem/registeritemform";
     }
 
 
     @PostMapping("/new")
-    public String createItem(Principal principal, @ModelAttribute("insertItemDto") @Validated InsertItemDto insertItemDto,
+    public String createItem(@AuthenticationPrincipal UserDetailsImpl userDetails, @ModelAttribute("insertItemDto") @Validated InsertItemDto insertItemDto,
                              BindingResult bindingResult, RedirectAttributes redirectAttributes){
         if(bindingResult.hasErrors()) {
             return "adminitem/registeritemform";
         } else if (insertItemDto.getItemImageFiles().get(0).isEmpty()) {
-            bindingResult.reject("notfoundimage", ErrorCode.NOT_FOUND_IMAGE.getMessage());
+            bindingResult.reject("notExistFirstImage", ErrorCode.NOT_EXISTS_FIRST_ITEM_IMAGE.getMessage());
             return "adminitem/registeritemform";
         }
         try {
-            Long itemId = adminItemService.createItem(insertItemDto, principal.getName());
-            redirectAttributes.addAttribute("itemId", itemId);
+            Item savedItem = adminItemService.createItem(insertItemDto, userDetails.getUsername());
+            redirectAttributes.addAttribute("itemId", savedItem.getId());
         } catch (Exception e) {
-            e.printStackTrace();
-            bindingResult.reject("error", "상품등록중 에러가 발생했습니다.");
+            log.error(e.getMessage());
+            bindingResult.reject("globalError", "상품 등록 중 에러가 발생했습니다.");
             return "adminitem/registeritemform";
         }
 

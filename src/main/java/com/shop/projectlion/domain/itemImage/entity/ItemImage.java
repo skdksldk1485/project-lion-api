@@ -20,20 +20,20 @@ public class ItemImage extends BaseEntity {
     @Column(name = "item_image_id")
     private Long id;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false, length = 500)
     private String imageName;
 
-    @Column
+    @Column(nullable = false, length = 500)
     private String imageUrl;
 
     @Column(nullable = false)
     private Boolean isRepImage;
 
-    @Column
+    @Column(nullable = false, length = 200)
     private String originalImageName;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "item_id")
+    @JoinColumn(name = "item_id", nullable = false)
     private Item item;
 
     @Builder
@@ -43,6 +43,16 @@ public class ItemImage extends BaseEntity {
         this.isRepImage = isRepImage;
         this.originalImageName = originalImageName;
         this.item = item;
+    }
+
+    public static ItemImage createItemImage(ItemImage itemImage, Item item) {
+        return ItemImage.builder()
+                .imageName(itemImage.getImageName())
+                .imageUrl(itemImage.getImageUrl())
+                .originalImageName(itemImage.getOriginalImageName())
+                .isRepImage(itemImage.getIsRepImage())
+                .item(item)
+                .build();
     }
 
     public static ItemImage updateItemImage(ItemImage itemImage) {

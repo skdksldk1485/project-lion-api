@@ -1,9 +1,7 @@
 package com.shop.projectlion.web.adminitem.dto;
 
-import com.shop.projectlion.domain.delivery.entity.Delivery;
 import com.shop.projectlion.domain.item.constant.ItemSellStatus;
 import com.shop.projectlion.domain.item.entity.Item;
-import com.shop.projectlion.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,15 +33,13 @@ public class InsertItemDto {
 
     private List<MultipartFile> itemImageFiles;
 
-    public Item toEntity(Member member, Delivery delivery){
+    public Item toEntity(){
         return Item.builder()
                 .itemDetail(itemDetail)
                 .price(price)
                 .itemName(itemName)
                 .itemSellStatus(itemSellStatus)
                 .stockNumber(stockNumber)
-                .member(member)
-                .delivery(delivery)
                 .build();
     }
 
