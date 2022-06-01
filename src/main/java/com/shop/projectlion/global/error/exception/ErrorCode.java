@@ -10,7 +10,7 @@ public enum ErrorCode {
     MISMATCHED_PASSWORD(401, "패스워드가 일치하지 않습니다."),
     LOGIN_ERROR(401, "아이디 또는 비밀번호를 확인해주세요"),
 
-    NOT_EXISTS_IMAGE(400,"첫번째 상품 이미지는 필수 입력 값입니다."),
+    NOT_EXISTS_ITEM(400,"상품 정보가 존재하지 않습니다."),
     NOT_EXISTS_DELIVERY(400,"배송 정보를 찾을 수 없습니다."),
     NOT_EXISTS_MEMBER(400, "회원 정보를 찾을 수 없습니다."),
 

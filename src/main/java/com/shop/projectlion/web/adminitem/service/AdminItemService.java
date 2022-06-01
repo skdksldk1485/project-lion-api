@@ -4,6 +4,7 @@ import com.shop.projectlion.domain.delivery.entity.Delivery;
 import com.shop.projectlion.domain.delivery.service.DeliveryService;
 import com.shop.projectlion.domain.item.entity.Item;
 import com.shop.projectlion.domain.item.service.ItemService;
+import com.shop.projectlion.domain.itemImage.entity.ItemImage;
 import com.shop.projectlion.domain.itemImage.service.ItemImageService;
 import com.shop.projectlion.domain.member.entity.Member;
 import com.shop.projectlion.domain.member.service.MemberService;
@@ -11,6 +12,7 @@ import com.shop.projectlion.global.error.exception.EntityNotFoundException;
 import com.shop.projectlion.global.error.exception.ErrorCode;
 import com.shop.projectlion.web.adminitem.dto.DeliveryDto;
 import com.shop.projectlion.web.adminitem.dto.InsertItemDto;
+import com.shop.projectlion.web.adminitem.dto.UpdateItemDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -57,6 +59,14 @@ public class AdminItemService {
 
         return saveItem;
     }
+
+    public UpdateItemDto getUpdateItemDto(Long itemId) {
+        Item item = itemService.findByItemId(itemId);
+        List<ItemImage> itemImages = itemImageService.findByItemOrderByIdAsc(item);
+        return UpdateItemDto.of(item, itemImages);
+    }
+
+
 
 
 }

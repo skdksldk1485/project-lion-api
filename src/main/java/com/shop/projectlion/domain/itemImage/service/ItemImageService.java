@@ -49,5 +49,11 @@ public class ItemImageService {
         itemImageRepository.save(saveItemImage);
     }
 
+    public List<ItemImage> findByItemOrderByIdAsc(Item item) {
+        return itemImageRepository.findByItemOrderByIdAsc(item);
+    }
+
+
+
 
 }

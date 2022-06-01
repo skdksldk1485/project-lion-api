@@ -2,6 +2,8 @@ package com.shop.projectlion.domain.item.service;
 
 import com.shop.projectlion.domain.item.entity.Item;
 import com.shop.projectlion.domain.item.repository.ItemRepository;
+import com.shop.projectlion.global.error.exception.EntityNotFoundException;
+import com.shop.projectlion.global.error.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,5 +19,10 @@ public class ItemService {
     public Item createItem(Item item){
         itemRepository.save(item);
         return item;
+    }
+
+    public Item findByItemId(Long itemId) {
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_EXISTS_ITEM));
     }
 }
