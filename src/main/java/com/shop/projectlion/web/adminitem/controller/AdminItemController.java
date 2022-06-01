@@ -5,6 +5,8 @@ import com.shop.projectlion.domain.delivery.repository.DeliveryRepository;
 import com.shop.projectlion.domain.item.constant.ItemSellStatus;
 import com.shop.projectlion.domain.member.entity.Member;
 import com.shop.projectlion.domain.member.repository.MemberRepository;
+import com.shop.projectlion.domain.member.service.MemberService;
+import com.shop.projectlion.global.error.exception.BusinessException;
 import com.shop.projectlion.global.error.exception.ErrorCode;
 import com.shop.projectlion.web.adminitem.dto.DeliveryDto;
 import com.shop.projectlion.web.adminitem.dto.InsertItemDto;
@@ -21,7 +23,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,11 +32,13 @@ public class AdminItemController {
     private final DeliveryRepository deliveryrepository;
     private final MemberRepository memberRepository;
     private final AdminItemService adminItemService;
+    private final MemberService memberService;
 
     @GetMapping("/new")
     public String itemForm(Model model, Principal principal) {
         String email = principal.getName();
-        Optional<Member> member = memberRepository.findByEmail(email);
+        Member member = memberService.findMemberByEmail(email)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
         List<Delivery> deliveries = deliveryrepository.findByMember(member);
         List<DeliveryDto> deliveryDtos = new ArrayList<>();
         for (int i = 0; i < deliveries.size(); i++) {

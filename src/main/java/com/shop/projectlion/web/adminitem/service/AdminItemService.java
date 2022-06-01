@@ -31,7 +31,7 @@ public class AdminItemService {
     @Transactional
     public Long createItem(InsertItemDto insertItemDto, String email) throws Exception{
         Member member = memberService.findMemberByEmail(email)
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOR_FOUND_MEMBER));
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
         Delivery delivery = deliveryService.findById(insertItemDto.getDeliveryId())
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_DELIVERY));
         Item item = insertItemDto.toEntity(member, delivery);
