@@ -8,6 +8,7 @@ import com.shop.projectlion.infra.UploadFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -51,6 +52,32 @@ public class ItemImageService {
 
     public List<ItemImage> findByItemOrderByIdAsc(Item item) {
         return itemImageRepository.findByItemOrderByIdAsc(item);
+    }
+
+    @Transactional
+    public void updateItemImage(ItemImage itemImage, MultipartFile itemImageFile) throws IOException {
+        // 기존 상품 이미지 파일이 존재하는 경우 파일 삭제
+        if(StringUtils.hasText(itemImage.getImageName())) {
+            fileService.deleteFile(itemImage.getImageUrl());
+        }
+
+        // 새로운 이미지 파일 등록
+        UploadFile uploadFile = fileService.storeFile(itemImageFile);
+        String originalFilename = uploadFile.getOriginalFileName();
+        String storeFileName = uploadFile.getStoreFileName();
+        String imageUrl = IMAGE_URL_PREFIX + storeFileName;
+
+        // 상품 이미지 파일 정보 업데이트
+        itemImage.updateItemImage(originalFilename, storeFileName, imageUrl);
+    }
+
+    @Transactional
+    public void deleteItemImage(ItemImage itemImage) throws IOException {
+        // 기존 이미지 파일 삭제
+        String fileUploadUrl = fileService.getFullFileUploadPath(itemImage.getImageName());
+        fileService.deleteFile(fileUploadUrl);
+        // 이미지 정보 초기화
+        itemImage.initImageInfo();
     }
 
 

@@ -55,12 +55,16 @@ public class ItemImage extends BaseEntity {
                 .build();
     }
 
-    public static ItemImage updateItemImage(ItemImage itemImage) {
-        return ItemImage.builder()
-                .imageName(itemImage.getImageName())
-                .imageUrl(itemImage.getImageUrl())
-                .originalImageName(itemImage.getOriginalImageName())
-                .build();
+    public void updateItemImage(String originalImageName, String imageName, String imageUrl){
+        this.originalImageName = originalImageName;
+        this.imageName = imageName;
+        this.imageUrl = imageUrl;
+    }
+
+    public void initImageInfo() {
+        this.originalImageName = "";
+        this.imageName = "";
+        this.imageUrl = "";
     }
 
 

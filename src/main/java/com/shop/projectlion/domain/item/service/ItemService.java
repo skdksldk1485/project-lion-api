@@ -25,4 +25,11 @@ public class ItemService {
         return itemRepository.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorCode.NOT_EXISTS_ITEM));
     }
+
+    @Transactional
+    public Item updateItem(Long itemId, Item updateItem) {
+        Item savedItem = findByItemId(itemId);
+        savedItem.updateItem(updateItem);
+        return savedItem;
+    }
 }
