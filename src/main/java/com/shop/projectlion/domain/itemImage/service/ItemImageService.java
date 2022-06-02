@@ -88,6 +88,10 @@ public class ItemImageService {
         return itemImageRepository.findByItem(item);
     }
 
+    public ItemImage findByItemAndIsRepImage(Item item, boolean isRepImage) {
+        return itemImageRepository.findByItemAndIsRepImage(item, isRepImage);
+    }
+
 
 
 

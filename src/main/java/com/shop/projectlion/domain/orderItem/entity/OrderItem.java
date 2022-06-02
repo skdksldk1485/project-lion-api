@@ -52,7 +52,7 @@ public class OrderItem extends BaseEntity {
                 .build();
     }
 
-    public int getToTalPrice(){
+    public int getTotalPrice(){
         return orderPrice * count;
     }
 
@@ -61,7 +61,7 @@ public class OrderItem extends BaseEntity {
         this.order = order;
     }
 
-    public void add(OrderItem orderItem) {
-
+    public void cancel() {
+        this.getItem().increaseStock(count);
     }
 }

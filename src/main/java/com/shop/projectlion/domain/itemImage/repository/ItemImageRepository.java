@@ -14,4 +14,7 @@ public interface ItemImageRepository extends JpaRepository<ItemImage, Long> {
 
     List<ItemImage> findByItem(Item item);
 
+    ItemImage findByItemAndIsRepImage(Item item, boolean isRepImage);
+
+
 }

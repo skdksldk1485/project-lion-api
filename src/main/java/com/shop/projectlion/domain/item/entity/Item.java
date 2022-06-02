@@ -90,10 +90,6 @@ public class Item extends BaseEntity {
         this.delivery = delivery;
     }
 
-//    public void removeStock(Integer stockNumber){
-//        this.stockNumber -= stockNumber;
-//    }
-
     public void decreaseStock(Integer stockNumber){
         int restStock = this.stockNumber - stockNumber;
         if(restStock < 0) {
@@ -103,6 +99,10 @@ public class Item extends BaseEntity {
         if(this.stockNumber == 0) {
             this.itemSellStatus = ItemSellStatus.SOLD_OUT;
         }
+    }
+
+    public void increaseStock(int stockNumber){
+        this.stockNumber += stockNumber;
     }
 
 }

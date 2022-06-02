@@ -1,6 +1,7 @@
 package com.shop.projectlion.domain.order.entity;
 
 import com.shop.projectlion.domain.base.BaseEntity;
+import com.shop.projectlion.domain.delivery.entity.Delivery;
 import com.shop.projectlion.domain.member.entity.Member;
 import com.shop.projectlion.domain.order.constant.OrderStatus;
 import com.shop.projectlion.domain.orderItem.entity.OrderItem;
@@ -12,7 +13,9 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -60,6 +63,37 @@ public class Order extends BaseEntity {
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.updateOrder(this);
+    }
+
+    public int getTotalPrice() {
+        int totalPrice = orderItems.stream().mapToInt(OrderItem::getTotalPrice).sum();
+        long totalDeliveryFee = getTotalDeliveryFee();
+        totalPrice += totalDeliveryFee;
+        return totalPrice;
+    }
+
+    public int getTotalDeliveryFee() {
+        int totalDeliveryFee = 0;
+        Map<Long, Delivery> deliveryMap = new HashMap<>();
+        for(OrderItem orderItem : orderItems) {
+            Delivery delivery = orderItem.getItem().getDelivery();
+            deliveryMap.put(delivery.getId(), delivery);
+        }
+
+        // 배송비 추가 (배송비 아이디가 같은 경우 출고지가 같은걸로보고 배송비를 1번만 적용함)
+        for (Long deliveryId : deliveryMap.keySet()) {
+            Delivery delivery = deliveryMap.get(deliveryId);
+            totalDeliveryFee += delivery.getDeliveryFee();
+        }
+
+        return totalDeliveryFee;
+    }
+
+    public void cancelOrder() {
+        this.orderStatus = OrderStatus.CANCEL;
+        for (OrderItem orderItem : orderItems) {
+            orderItem.cancel();
+        }
     }
 
 
