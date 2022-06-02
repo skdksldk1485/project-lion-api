@@ -4,6 +4,7 @@ import com.shop.projectlion.domain.base.BaseEntity;
 import com.shop.projectlion.domain.member.entity.Member;
 import com.shop.projectlion.domain.order.constant.OrderStatus;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,6 +33,12 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @Builder
+    public Order(OrderStatus orderStatus, LocalDateTime orderTime, Member member){
+        this.orderStatus = orderStatus;
+        this.orderTime = orderTime;
+        this.member = member;
+    }
 
 
 
