@@ -3,6 +3,7 @@ package com.shop.projectlion.domain.order.entity;
 import com.shop.projectlion.domain.base.BaseEntity;
 import com.shop.projectlion.domain.member.entity.Member;
 import com.shop.projectlion.domain.order.constant.OrderStatus;
+import com.shop.projectlion.domain.orderItem.entity.OrderItem;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -39,6 +40,13 @@ public class Order extends BaseEntity {
         this.orderTime = orderTime;
         this.member = member;
     }
+
+    public void addOrderItem(OrderItem orderItem){
+        orderItem.add(orderItem);
+        orderItem.setOrder(this);
+    }
+
+
 
 
 

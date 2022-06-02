@@ -88,4 +88,9 @@ public class Item extends BaseEntity {
         this.delivery = delivery;
     }
 
+    public Item removeStock(Integer stockNumber){
+        this.stockNumber -= stockNumber;
+        return null;
+    }
+
 }

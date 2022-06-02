@@ -14,7 +14,9 @@ public enum ErrorCode {
     NOT_EXISTS_DELIVERY(400,"배송 정보를 찾을 수 없습니다."),
     NOT_EXISTS_MEMBER(400, "회원 정보를 찾을 수 없습니다."),
 
-    NOT_EXISTS_FIRST_ITEM_IMAGE(400,"첫번째 상품 이미지는 필수 입력 값 입니다.")
+    NOT_EXISTS_FIRST_ITEM_IMAGE(400,"첫번째 상품 이미지는 필수 입력 값 입니다."),
+
+    NOT_EXISTS_STOCK(400,"상품의 재고가 부족 합니다.")
     ;
 
     ErrorCode(int status, String message) {

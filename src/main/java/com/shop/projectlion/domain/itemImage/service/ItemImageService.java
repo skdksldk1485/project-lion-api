@@ -84,6 +84,10 @@ public class ItemImageService {
         return itemImageRepository.findByItemIdAndIsRepImage(itemId, true);
     }
 
+    public List<ItemImage> getItemDtlImage(Item item){
+        return itemImageRepository.findByItem(item);
+    }
+
 
 
 

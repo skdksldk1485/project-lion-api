@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
 
-    @Query("select t " +
-            "from Item t " +
-            "where (t.itemName like %:searchQuery% or t.itemDetail like %:searchQuery%) and t.itemSellStatus = :status ")
+    @Query("select i " +
+            "from Item i " +
+            "where (i.itemName like %:searchQuery% or i.itemDetail like %:searchQuery%) and i.itemSellStatus = :status ")
     Page<Item> getMainItemsPage(String searchQuery, ItemSellStatus status, Pageable pageable);
 
 }

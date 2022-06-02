@@ -43,5 +43,24 @@ public class OrderItem extends BaseEntity {
         this.order = order;
     }
 
+    public static OrderItem createOrderItem(Item item, OrderItem orderItem){
+        return OrderItem.builder()
+                .count(orderItem.getCount())
+                .orderPrice(orderItem.getOrderPrice())
+                .item(item.removeStock(orderItem.count))
+                .build();
+    }
 
+    public int getToTalPrice(){
+        return orderPrice * count;
+    }
+
+
+    public void setOrder(Order order) {
+        this.order = order;
+    }
+
+    public void add(OrderItem orderItem) {
+
+    }
 }

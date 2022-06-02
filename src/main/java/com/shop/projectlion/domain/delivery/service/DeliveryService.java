@@ -28,5 +28,9 @@ public class DeliveryService {
         return deliveryRepository.findByMember(member);
     }
 
+//    public Delivery findByItem(Item item){
+//        return deliveryRepository.findByItem(item);
+//    }
+
 
 }
