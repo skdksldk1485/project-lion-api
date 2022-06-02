@@ -80,6 +80,10 @@ public class ItemImageService {
         itemImage.initImageInfo();
     }
 
+    public ItemImage getRepImage(Long itemId){
+        return itemImageRepository.findByItemIdAndIsRepImage(itemId, true);
+    }
+
 
 
 

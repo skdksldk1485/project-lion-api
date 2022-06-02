@@ -2,6 +2,7 @@ package com.shop.projectlion.web.itemdtl.controller;
 
 import com.shop.projectlion.domain.item.constant.ItemSellStatus;
 import com.shop.projectlion.web.itemdtl.dto.ItemDtlDto;
+import com.shop.projectlion.web.itemdtl.service.ItemDtlService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,8 +18,13 @@ import java.util.List;
 @RequestMapping("/itemdtl")
 public class ItemDtlController {
 
+    private final ItemDtlService itemDtlService;
+
     @GetMapping(value = "/{itemId}")
     public String itemDtl(Model model, @PathVariable("itemId") Long itemId){
+
+//        ItemDtlDto itemDtlDto = itemDtlService.getItemDtl(itemId);
+
         ItemDtlDto itemDtlDto = ItemDtlDto.builder()
                 .itemId(1L)
                 .itemName("청바지")

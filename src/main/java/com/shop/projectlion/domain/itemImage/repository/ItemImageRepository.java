@@ -10,4 +10,6 @@ public interface ItemImageRepository extends JpaRepository<ItemImage, Long> {
 
     List<ItemImage> findByItemOrderByIdAsc(Item item);
 
+    ItemImage findByItemIdAndIsRepImage(Long itemId, Boolean isRepImage);
+
 }
