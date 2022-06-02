@@ -1,8 +1,8 @@
 package com.shop.projectlion.global.error.exception;
 
-public class OutofStockException extends BusinessException {
+public class OutofStockException extends RuntimeException {
 
-    public OutofStockException(ErrorCode errorCode) {
-        super(errorCode);
+    public OutofStockException(String errorMessage) {
+        super(errorMessage);
     }
 }

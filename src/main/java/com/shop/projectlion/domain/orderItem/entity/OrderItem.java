@@ -43,11 +43,12 @@ public class OrderItem extends BaseEntity {
         this.order = order;
     }
 
-    public static OrderItem createOrderItem(Item item, OrderItem orderItem){
+    public static OrderItem createOrderItem(Item item, Integer count, Integer orderPrice){
+        item.decreaseStock(count);
         return OrderItem.builder()
-                .count(orderItem.getCount())
-                .orderPrice(orderItem.getOrderPrice())
-                .item(item.removeStock(orderItem.count))
+                .item(item)
+                .count(count)
+                .orderPrice(orderPrice)
                 .build();
     }
 
@@ -56,7 +57,7 @@ public class OrderItem extends BaseEntity {
     }
 
 
-    public void setOrder(Order order) {
+    public void updateOrder(Order order) {
         this.order = order;
     }
 

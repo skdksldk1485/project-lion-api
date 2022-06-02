@@ -29,19 +29,5 @@ public class MainItemDto {
         this.price = price;
     }
 
-//    public static Page<MainItemDto> of(Page<Item> items, Page<ItemImage> itemImages ){
-//        return items.stream().map
-//
-//    }
-
-//    public static MainItemDto toDto(Item item, ItemImage itemImage){
-//        return MainItemDto.builder()
-//                .itemId(item.getId())
-//                .itemName(item.getItemName())
-//                .itemDetail(item.getItemDetail())
-//                .imageUrl(itemImage.getImageUrl())
-//                .price(item.getPrice())
-//                .build();
-//    }
 
 }

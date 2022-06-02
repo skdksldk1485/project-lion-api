@@ -5,7 +5,6 @@ import com.shop.projectlion.domain.item.entity.Item;
 import com.shop.projectlion.domain.item.repository.ItemRepository;
 import com.shop.projectlion.global.error.exception.EntityNotFoundException;
 import com.shop.projectlion.global.error.exception.ErrorCode;
-import com.shop.projectlion.global.error.exception.OutofStockException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -41,12 +40,4 @@ public class ItemService {
         return itemRepository.getMainItemsPage(searchQurey, ItemSellStatus.SELL, pageable);
     }
 
-    @Transactional
-    public void removeStock(Item item, Integer stockNumber){
-        if(item.getStockNumber() < 0){
-            throw new OutofStockException(ErrorCode.NOT_EXISTS_STOCK);
-        } else {
-            item.removeStock(stockNumber);
-        }
-    }
 }

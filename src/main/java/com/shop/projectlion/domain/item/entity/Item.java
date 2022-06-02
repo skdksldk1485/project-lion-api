@@ -4,6 +4,8 @@ import com.shop.projectlion.domain.base.BaseEntity;
 import com.shop.projectlion.domain.delivery.entity.Delivery;
 import com.shop.projectlion.domain.item.constant.ItemSellStatus;
 import com.shop.projectlion.domain.member.entity.Member;
+import com.shop.projectlion.global.error.exception.ErrorCode;
+import com.shop.projectlion.global.error.exception.OutofStockException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -88,9 +90,19 @@ public class Item extends BaseEntity {
         this.delivery = delivery;
     }
 
-    public Item removeStock(Integer stockNumber){
-        this.stockNumber -= stockNumber;
-        return null;
+//    public void removeStock(Integer stockNumber){
+//        this.stockNumber -= stockNumber;
+//    }
+
+    public void decreaseStock(Integer stockNumber){
+        int restStock = this.stockNumber - stockNumber;
+        if(restStock < 0) {
+            throw new OutofStockException(ErrorCode.NOT_EXISTS_STOCK.getMessage() + " (현재 재고 수량: " + this.stockNumber + ")");
+        }
+        this.stockNumber = restStock;
+        if(this.stockNumber == 0) {
+            this.itemSellStatus = ItemSellStatus.SOLD_OUT;
+        }
     }
 
 }

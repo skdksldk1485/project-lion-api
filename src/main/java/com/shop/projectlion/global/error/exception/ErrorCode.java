@@ -16,7 +16,10 @@ public enum ErrorCode {
 
     NOT_EXISTS_FIRST_ITEM_IMAGE(400,"첫번째 상품 이미지는 필수 입력 값 입니다."),
 
-    NOT_EXISTS_STOCK(400,"상품의 재고가 부족 합니다.")
+    NOT_EXISTS_STOCK(400,"상품의 재고가 부족 합니다."),
+
+    ORDER_NOT_EXISTS(400, "해당 주문은 존재하지 않습니다."),
+    NOT_MEMBER_ORDER(403, "해당 회원의 주문이 아닙니다.")
     ;
 
     ErrorCode(int status, String message) {

@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,16 +36,30 @@ public class Order extends BaseEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems;
+
     @Builder
-    public Order(OrderStatus orderStatus, LocalDateTime orderTime, Member member){
-        this.orderStatus = orderStatus;
-        this.orderTime = orderTime;
+    public Order(Member member, LocalDateTime orderTime, OrderStatus orderStatus, List<OrderItem> orderItems) {
         this.member = member;
+        this.orderTime = orderTime;
+        this.orderStatus = orderStatus;
+        this.orderItems = orderItems;
     }
 
-    public void addOrderItem(OrderItem orderItem){
-        orderItem.add(orderItem);
-        orderItem.setOrder(this);
+    public static Order createOrder(LocalDateTime orderTime, Member member) {
+        Order order = Order.builder()
+                .member(member)
+                .orderStatus(OrderStatus.ORDER)
+                .orderTime(orderTime)
+                .orderItems(new ArrayList<>())
+                .build();
+        return order;
+    }
+
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.updateOrder(this);
     }
 
 
