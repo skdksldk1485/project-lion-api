@@ -9,4 +9,8 @@ public class BusinessException extends RuntimeException {
         super(errorCode.getMessage());
     }
 
+    public BusinessException(String errorMessage) {
+        super(errorMessage);
+    }
+
 }

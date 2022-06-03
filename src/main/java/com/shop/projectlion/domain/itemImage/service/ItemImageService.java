@@ -80,6 +80,18 @@ public class ItemImageService {
         itemImage.initImageInfo();
     }
 
+    public ItemImage getRepImage(Long itemId){
+        return itemImageRepository.findByItemIdAndIsRepImage(itemId, true);
+    }
+
+    public List<ItemImage> getItemDtlImage(Item item){
+        return itemImageRepository.findByItem(item);
+    }
+
+    public ItemImage findByItemAndIsRepImage(Item item, boolean isRepImage) {
+        return itemImageRepository.findByItemAndIsRepImage(item, isRepImage);
+    }
+
 
 
 
