@@ -8,7 +8,18 @@ public enum ErrorCode {
     // 인증
     ALREADY_REGISTERED_MEMBER(400, "이미 가입된 회원 입니다."),
     MISMATCHED_PASSWORD(401, "패스워드가 일치하지 않습니다."),
-    LOGIN_ERROR(401, "아이디 또는 비밀번호를 확인해주세요")
+    LOGIN_ERROR(401, "아이디 또는 비밀번호를 확인해주세요"),
+
+    NOT_EXISTS_ITEM(400,"상품 정보가 존재하지 않습니다."),
+    NOT_EXISTS_DELIVERY(400,"배송 정보를 찾을 수 없습니다."),
+    NOT_EXISTS_MEMBER(400, "회원 정보를 찾을 수 없습니다."),
+
+    NOT_EXISTS_FIRST_ITEM_IMAGE(400,"첫번째 상품 이미지는 필수 입력 값 입니다."),
+
+    NOT_EXISTS_STOCK(400,"상품의 재고가 부족 합니다."),
+
+    ORDER_NOT_EXISTS(400, "해당 주문은 존재하지 않습니다."),
+    NOT_MEMBER_ORDER(403, "해당 회원의 주문이 아닙니다.")
     ;
 
     ErrorCode(int status, String message) {
