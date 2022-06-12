@@ -28,3 +28,6 @@ LION SHOP는 E-commerce형태의 웹 서비스를 구현한 쇼핑몰 프로젝�
   - Docker
   - AWS
 
+## 🤓 기획 및 설계
+
+![structure](https://user-images.githubusercontent.com/29578054/173249530-6ca84413-485a-44bc-bc04-3e300e14f460.png)
