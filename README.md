@@ -31,3 +31,9 @@ LION SHOP는 E-commerce형태의 웹 서비스를 구현한 쇼핑몰 프로젝�
 ## 🤓 기획 및 설계
 
 ![structure](https://user-images.githubusercontent.com/29578054/173249530-6ca84413-485a-44bc-bc04-3e300e14f460.png)
+
+## 🤓 DB ERD
+
+![캡처11](https://user-images.githubusercontent.com/29578054/187077616-71991d9b-3bdd-4531-b267-ea9d27171cf4.PNG)
+
+
