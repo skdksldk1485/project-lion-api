@@ -107,3 +107,4 @@ LION SHOP는 E-commerce형태의 웹 서비스를 구현한 쇼핑몰 프로젝�
 - 주문 상태(OrderStatus)는 CANCEL로 저장
 ![img_7 (1)](https://user-images.githubusercontent.com/29578054/187986592-6f0be96c-dfa9-4fe0-8611-0399497a63cd.png)
 
+
